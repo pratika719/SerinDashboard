@@ -1,65 +1,80 @@
-import Image from "next/image";
-
+"use client";
+import { useState,useEffect} from "react";
+import { usePresence } from "../features/presence/hooks/usePresence";
+import OnlineUsers from "../features/presence/components/OnlineUsers";
+import CursorLayer from "../features/cursor/components/CursorLayer";
+import ReactionLayer from "../features/reactions/components/ReactionLayer";
+import ReactionPanel from "../features/reactions/components/ReactionPanel";
+import DotField from "../features/reactions/components/DotField.jsx";
+import ShinyText from "../components/ShinyText";
 export default function Home() {
+
+  
+  const { users, count, isConnected } = usePresence("landing-page");
+// const [hydrated, setHydrated] = useState(false);
+
+// useEffect(() => {
+//     setHydrated(true);
+// }, []);
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="min-h-screen bg-[#07070a] text-white flex flex-col items-center justify-center gap-6 overflow-hidden relative">
+
+      <DotField
+        dotRadius={1.6}
+        dotSpacing={16}
+        bulgeStrength={80}
+        glowRadius={220}
+        sparkle={true}
+        waveAmplitude={0}
+        cursorRadius={300}
+        cursorForce={0.1}
+        bulgeOnly
+        gradientFrom="rgba(168, 85, 247, 0.45)"
+        gradientTo="rgba(6, 182, 212, 0.35)"
+        glowColor="rgba(20, 10, 40, 0.6)"
+        className="absolute inset-0 pointer-events-none z-0"
+      />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#07070a_95%)] pointer-events-none z-0" />
+
+      <div className="flex flex-col items-center gap-2 z-10">
+        <h1 className="text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 tracking-tight">
+
+
+          <ShinyText
+            text="Serin DashBoard"
+            speed={2}
+            delay={0}
+            color="#b5b5b5"
+            shineColor="#514343ff"
+            spread={120}
+            direction="left"
+            yoyo={false}
+            pauseOnHover={false}
+            disabled={false}
+          />
+        </h1>
+
+        <div
+          className={`h-1 w-24 rounded-full ${isConnected ? "bg-cyan-500" : "bg-red-500"
+            } animate-pulse`}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+
+      <p className="text-gray-400 text-xl max-w-md text-center z-10 leading-relaxed font-light">
+        Experience the next generation of{" "}
+        <span className="text-cyan-400 font-medium">
+          real-time collaboration
+        </span>.
+      </p>
+
+      <div className="z-10">
+        <OnlineUsers count={count} users={users} />
+      </div>
+
+      <CursorLayer roomId="landing-page" />
+      <ReactionLayer />
+      <ReactionPanel roomId="landing-page" />
+    </main>
   );
 }
